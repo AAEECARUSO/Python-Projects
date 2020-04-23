@@ -24,11 +24,11 @@ print(menu)
 
 
 while(True):
-    
+
     answer = int()
-    
+
     while(True):
-        
+
         try:
             answer = int(input("\nSelect: "))
             break
