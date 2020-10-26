@@ -1,7 +1,5 @@
 
 
-
-
 import os
 import sys
 import string
@@ -16,9 +14,8 @@ empty = "."
 ship_hits = {"A":0, "B":0, "C":0, "D":0}
 hit_tracker = {"A":[], "B":[], "C":[], "D":[]}
 cols = list(string.ascii_uppercase)[0:10]
-board = np.array([[empty]*10]*10)
-player_board = board
-enemy_board = board
+player_board = np.array([[empty]*10]*10)
+enemy_board = np.array([[empty]*10]*10)
 ships = {"A":5, "B":4, "C":4, "D":3}
 miss_counter = 0
 hit_counter = 0
@@ -46,12 +43,11 @@ def place_check(c, sign, x, y, ship_num, locations):
 
 
 def restart():
-    global cols ,board ,player_board ,ships ,miss_counter ,hit_counter ,locations, noftorp, empty, ship_hits, enemy_board
+    global cols ,player_board ,ships ,miss_counter ,hit_counter ,locations, noftorp, empty, ship_hits, enemy_board
 
     ship_hits = {"A":0, "B":0, "C":0, "D":0}
     hit_tracker = {"A":[], "B":[], "C":[], "D":[]}
     cols = list(string.ascii_uppercase)[0:10]
-    board = np.array([[empty]*10]*10)
     player_board = np.array([[empty]*10]*10)
     enemy_board = np.array([[empty]*10]*10)
     ships = {"A":5, "B":4, "C":4, "D":3}
@@ -91,7 +87,7 @@ def restart():
                     x += col_dir
                     locations.append([x, y])
 
-                    board[y, x] = ship_id
+                    enemy_board[y, x] = ship_id
                     xl.append(x)
                     yl.append(y)
                     continue
@@ -109,10 +105,11 @@ def restart():
                     x -= col_dir
                     locations.append([x, y])
 
-                    board[y, x] = ship_id
+                    enemy_board[y, x] = ship_id
                     xl.append(x)
                     yl.append(y)
                     continue
+
             else:
                 if j == 0:
                     while(True):
@@ -127,7 +124,7 @@ def restart():
                 y += row_dir
                 locations.append([x, y])
 
-                board[y, x] = ship_id
+                enemy_board[y, x] = ship_id
                 xl.append(x)
                 yl.append(y)
                 continue
@@ -146,10 +143,11 @@ def restart():
                 y += row_dir
                 locations.append([x, y])
 
-                board[y, x] = ship_id
+                enemy_board[y, x] = ship_id
                 xl.append(x)
                 yl.append(y)
                 continue
+
             else:
                 if j == 0:
                     while(True):
@@ -164,7 +162,7 @@ def restart():
                 y += row_dir
                 locations.append([x, y])
 
-                board[y, x] = ship_id
+                enemy_board[y, x] = ship_id
                 xl.append(x)
                 yl.append(y)
                 continue
@@ -219,8 +217,7 @@ def print_board():
 
     print("\n   " + "-"*40) # Top boarder
 
-#    for n, i in enumerate(player_board):
-    for n, i in enumerate(enemy_board):
+    for n, i in enumerate(player_board):
         if (n + 1) < 10:
             print((n+1), " | ", end="")
         else:
@@ -228,7 +225,7 @@ def print_board():
         for j in i:
             print(j, " "*2, end="")
         print()
-        print("   | ") # MAYBE...
+        print("   | ")
     print()
 
 
@@ -243,7 +240,7 @@ def start():
     while(True):
         print_board()
 
-#        print(player_board) # This shows the actual location of all enemy ships
+        #print(enemy_board) # This shows the actual location of all enemy ships
 
         rst = False
         skip = False
@@ -259,8 +256,6 @@ def start():
 
         while(True):
             try:
-#                col_guess = input("Column (A-J): ").upper()
-
                 col_guess = input("Enter Coordinates To Fire On: ").upper()
 
                 if col_guess == "R":
@@ -324,17 +319,16 @@ def start():
             restart()
             continue
 
-        shot = player_board[row_guess, col_guess]
+        shot = enemy_board[row_guess, col_guess]
         
         if shot != empty:
-            enemy_board[row_guess, col_guess] = 'X'
+            player_board[row_guess, col_guess] = 'X'
             ship_hits[shot] += 1
             hit_tracker[shot].append([row_guess, col_guess])
             if ship_hits[shot] >= ships[shot]:
                 for i in hit_tracker[shot]:
-                    enemy_board[i[0], i[1]] = '*'
+                    player_board[i[0], i[1]] = '*'
 
-                #tprint("\n\n\tBOOM!\n\n")
                 msg = " : ENEMY UNIT [{}] HAS BEEN SUNK!".format(shot)
                 inc_message([msg])
 
@@ -342,7 +336,7 @@ def start():
             noftorp += 1
         
         else:
-            enemy_board[row_guess, col_guess] = 'O'
+            player_board[row_guess, col_guess] = 'O'
             miss_counter += 1
             noftorp += 1
 
@@ -352,7 +346,6 @@ def start():
             msg = [msg1, msg2]
             inc_message(msg)
 
-            #os.system("cls")
             again = (input("\n\n\nPlay Again (y|n)? ")).lower()
             if 'n' in again:
                 break
@@ -361,12 +354,3 @@ def start():
 
 
 start()
-
-
-
-
-
-
-
-
-
