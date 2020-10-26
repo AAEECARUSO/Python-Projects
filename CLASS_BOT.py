@@ -46,7 +46,7 @@ my_classes_days["CSE 280"] = ("Tuesday", "Thursday")
 #   The first element is the START time and the second element is the END time.
 ##################################################################################
 my_classes_times = dict()
-my_classes_times["CHEM 105"] = [ (14, 0), (15, 0) ]    # 2:00 -> 3:00
+my_classes_times["CHEM 105"] = [ (14, 0), (15, 0) ]  # 2:00 -> 3:00
 my_classes_times["CSE 280"] = [ (15, 15), (16, 15) ] # 3:15 -> 4:15
 
 ##################################################################################
@@ -183,28 +183,3 @@ except Exception as e:
     e = str(e)
     print("Class Bot Encountered Error\n{}".format(e))
     print("{}".format(e))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
